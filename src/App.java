@@ -14,11 +14,16 @@ public class App {
     Random random;
     
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         App game = new App();
-        game.playerSetup();
-        game.phase1();
-        game.close();
+        try {
+            game.playerSetup();
+            game.phase1();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }finally {
+            game.close();
+        }
     }
     
     private void phase1() {

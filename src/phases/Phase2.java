@@ -107,8 +107,8 @@ public class Phase2 {
 
     private void enterWeaponsTrader() {
         System.out.println(separator);
-        System.out.println("\n\n Crossroad Shop: Weapons Trader\n\n");
-        System.out.println("Trader Morshu: Hello sir, what would you like to see? We have finest quality of weapons.");
+        System.out.println("\n\n Crossroad MArket: Weapons Trader\n\n");
+        System.out.println("Trader Morshu: Hello sir, what would you like to see? Spears, swords, draggers you wanted, it's yours my friend as long as you have enough money.");
 
         boolean scene = true;
 
@@ -162,6 +162,7 @@ public class Phase2 {
                 sc.nextLine();
             } else {
                 System.out.println("Not enough money!");
+                System.out.println("\nTrader Morshu: Sorry sir, I can't give credit, come back when you're little... mm... richer!.");
             }
         }
     }
@@ -173,6 +174,35 @@ public class Phase2 {
     }
 
     private void enterPotionShop() {
+        System.out.println("\n\nCrossroad Market: Potion Shop.\n\n");
+        System.out.println("Shopkeeper: WELCOME! WELCOME! WELCOME!");
+        System.out.println("1 HP Potion");
+        System.out.println("Health recovery: 30HP");
+        System.out.println("Cost: 50 Coins");
+        System.out.println("\n\t>1. Buy.");
+        System.out.println("\t>2. Back.\n");
+        System.out.println("You have " + player.getFromInventory(Item.HP_POTIONS) + " HP Potion(s) in your inventory.\n");
+        
+        int choice = sc.nextInt();
+
+        if (choice == 1) { 
+            System.out.println("How many Hp potions you want to buy? - ");
+            int num = sc.nextInt();
+            if (num < 1) {
+                System.out.println("Invalid number!");
+                return;
+            }
+            int totalAmount = num * 50;
+            if ((player.getFromInventory(Item.MONEY) >= totalAmount)) {
+                player.addMoney(-totalAmount);
+                player.addInInventory(Item.HP_POTIONS, num);
+                System.out.println("\nItem bought! Your item is added to your inventory.");
+                System.out.println(divider);
+                sc.nextLine();
+            } else {
+                System.out.println("Not enough money!");
+            }
+        }
     }
 
     private void goWest() {
@@ -184,15 +214,19 @@ public class Phase2 {
         System.out.println(separator);
         System.out.println("* A " + thief.getName() + " appeared! *\n");
 
-        System.out.println(thief.getName() + ": I will let you go if you hand over me your valuables.");
+        System.out.println(thief.getName() + ": Hand over me your valuables and I wont harm you.");
         sc.nextLine();
         System.out.println("\n\n\tWhat do you want to do?");
         System.out.println("\t> 1: Fight the " + thief.getName() + ".");
-        System.out.println("\t> 2: Hand over you money.\n");
+        System.out.println("\t> 2: Hand over your money.\n");
 
         int choice = sc.nextInt();
 
         if (choice == 1) {
+            System.out.println("\nYou: No!, I won't.\n");
+            System.out.println(thief.getName() + ": Looks like you want to go the hard way.\n");
+            sc.nextLine();
+            
             int thiefHP = thief.getHitpoints();
             int thiefDamage = thief.getDamage();
             int playerHP = player.getHitpoints();

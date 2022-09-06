@@ -29,15 +29,17 @@ public class Player {
         boolean scene = true;
         while (scene) {
             System.out.println("========================================================");
+            System.out.println("Stats:");
             playerStatus();
             System.out.println("========================================================");
-            System.out.println("\nInventory\n");
-            for (Entry<Item, Integer> items: inventory.entrySet()) {
-                System.out.println(items.getKey() + ": " +  items.getValue());
+            System.out.println("\nInventory:\n");
+            for (Entry<Item, Integer> items : inventory.entrySet()) {
+                System.out.println("\t" + items.getKey() + ": " + items.getValue());
             }
             System.out.println("========================================================\n");
-            System.out.println("\t>1. Equip Weapon");
-            System.out.println("\t>2. Back");
+            System.out.println("\t>1. Equip Weapon.");
+            System.out.println("\t>2. Drink Health Potion.");
+            System.out.println("\t>3. Back");
             int choice = sc.nextInt();
 
             if (choice == 1) {
@@ -47,27 +49,39 @@ public class Player {
                 System.out.println("\n\t> 4. Knife");
                 choice = sc.nextInt();
 
-                if(getFromInventory(Item.SWORD) == 1 && choice == 1) {
+                if (getFromInventory(Item.SWORD) == 1 && choice == 1) {
                     equipWeapon(Item.SWORD);
                     System.out.println("You equiped Sword!");
-                }
-                else if(getFromInventory(Item.SPEAR) == 1 && choice == 2) {
+                } else if (getFromInventory(Item.SPEAR) == 1 && choice == 2) {
                     equipWeapon(Item.SPEAR);
                     System.out.println("You equiped Spear!");
-                }
-                else if(getFromInventory(Item.DAGGER) == 1 && choice == 3) {
+                } else if (getFromInventory(Item.DAGGER) == 1 && choice == 3) {
                     equipWeapon(Item.DAGGER);
                     System.out.println("You equiped Dagger!");
-                }
-                else if(getFromInventory(Item.KNIFE) == 1 && choice == 4) {
+                } else if (getFromInventory(Item.KNIFE) == 1 && choice == 4) {
                     equipWeapon(Item.KNIFE);
                     System.out.println("You equiped Knife!");
                 } else {
                     System.out.println("\nThis item is not present in your inventory.");
                 }
+            } else if (choice == 2) {
+                drinkHpPotion();
+                sc.nextLine();
+                sc.nextLine();
             } else {
                 scene = false;
             }
+        }
+    }
+
+    public void drinkHpPotion() {
+        int currentHpPotions = getFromInventory(Item.HP_POTIONS);
+        if (currentHpPotions > 0) {
+            setHitpoints(getHitpoints() + 30);
+            addInInventory(Item.HP_POTIONS, currentHpPotions - 1);
+            System.out.println("You drank hp potion, your health increased to 30HP.");
+        } else {
+            System.out.println("There are no hp potions left! Visit Potion Shop to buy hp potions.");
         }
     }
 
@@ -80,20 +94,25 @@ public class Player {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public int getHitpoints() {
         return hitpoints;
     }
+
     public void setHitpoints(int hitpoints) {
         this.hitpoints = hitpoints;
     }
+
     public String getWeapon() {
         return weapon;
     }
+
     public void equipWeapon(Item weapon) {
-        if(weapon == Item.KNIFE) {
+        if (weapon == Item.KNIFE) {
             setWeapon("Knife");
             setDamage(10);
         } else if (weapon == Item.SWORD) {
@@ -107,18 +126,23 @@ public class Player {
             setDamage(20);
         }
     }
+
     public void setWeapon(String weapon) {
         this.weapon = weapon;
     }
+
     public int getDamage() {
         return damage;
     }
+
     public void setDamage(int damage) {
         this.damage = damage;
     }
+
     public Map<Item, Integer> getInventory() {
         return inventory;
     }
+
     public void setInventory(Map<Item, Integer> inventory) {
         this.inventory = inventory;
     }
