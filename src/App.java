@@ -12,27 +12,25 @@ import static staticdata.GameData.*;
 public class App {
 
     Random random;
-    
 
     public static void main(String[] args) {
         App game = new App();
         try {
             game.playerSetup();
             game.phase1();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             game.close();
         }
     }
-    
+
     private void phase1() {
         Phase1 phase = new Phase1();
         phase.story();
         phase.townGate();
     }
 
-    
     public void playerSetup() {
 
         sc = new Scanner(System.in);

@@ -3,12 +3,13 @@ package phases;
 import static staticdata.GameData.*;
 
 public class Phase1 {
-    
+
     public void townGate() {
         boolean scene = true;
         boolean isPlayerReturned = false;
         while (scene) {
 
+            System.out.println(separator);
             System.out.println("\n\nPHASE 1: Town Gate\n");
             System.out.println("Your are at the gate of the town.");
             System.out.println("A gaurd is standing infront of you.\n");
@@ -56,7 +57,7 @@ public class Phase1 {
                 scene = false;
                 sc.nextLine();
 
-            }else if(choice == 3) {
+            } else if (choice == 3) {
                 player.checkInventory();
             } else if (choice == 4) {
                 System.out.println("You left.\n\nPress any key to continue...");

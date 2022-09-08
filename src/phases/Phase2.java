@@ -107,8 +107,9 @@ public class Phase2 {
 
     private void enterWeaponsTrader() {
         System.out.println(separator);
-        System.out.println("\n\n Crossroad MArket: Weapons Trader\n\n");
-        System.out.println("Trader Morshu: Hello sir, what would you like to see? Spears, swords, draggers you wanted, it's yours my friend as long as you have enough money.");
+        System.out.println("\n\n Crossroad Market: Weapons Trader\n\n");
+        System.out.println(
+                "Trader Morshu: Hello sir, what would you like to see? Spears, swords, draggers you wanted, it's yours my\nfriend as long as you have enough money.");
 
         boolean scene = true;
 
@@ -162,7 +163,8 @@ public class Phase2 {
                 sc.nextLine();
             } else {
                 System.out.println("Not enough money!");
-                System.out.println("\nTrader Morshu: Sorry sir, I can't give credit, come back when you're little... mm... richer!.");
+                System.out.println(
+                        "\nTrader Morshu: Sorry sir, I can't give credit, come back when you're little... mm... richer!.");
             }
         }
     }
@@ -181,11 +183,13 @@ public class Phase2 {
         System.out.println("Cost: 50 Coins");
         System.out.println("\n\t>1. Buy.");
         System.out.println("\t>2. Back.\n");
-        System.out.println("You have " + player.getFromInventory(Item.HP_POTIONS) + " HP Potion(s) in your inventory.\n");
-        
+        System.out.println("You have " + player.getFromInventory(Item.MONEY) + " coins.\n");
+        System.out
+                .println("You have " + player.getFromInventory(Item.HP_POTIONS) + " HP Potion(s) in your inventory.\n");
+
         int choice = sc.nextInt();
 
-        if (choice == 1) { 
+        if (choice == 1) {
             System.out.println("How many Hp potions you want to buy? - ");
             int num = sc.nextInt();
             if (num < 1) {
@@ -210,7 +214,7 @@ public class Phase2 {
     }
 
     private boolean battleThief() {
-        Thief thief = setupThief("Bandit", 30, "knife", 8);
+        Thief thief = setupThief("Bandit", 100, "knife", 8);
         System.out.println(separator);
         System.out.println("* A " + thief.getName() + " appeared! *\n");
 
@@ -226,11 +230,16 @@ public class Phase2 {
             System.out.println("\nYou: No!, I won't.\n");
             System.out.println(thief.getName() + ": Looks like you want to go the hard way.\n");
             sc.nextLine();
-            
+
             int thiefHP = thief.getHitpoints();
             int thiefDamage = thief.getDamage();
+            int thiefCriticalDamage = thiefDamage + 12;
+            int thiefCriticalChance = 30;
+
             int playerHP = player.getHitpoints();
             int playerDamage = player.getDamage();
+            int playerCriticalDamage = playerDamage + 10;
+            int playerCriticalChance = 50;
 
             boolean fight = true;
 
@@ -249,16 +258,40 @@ public class Phase2 {
                 choice = sc.nextInt();
                 if (choice == 1) {
                     System.out.println("***********************BATTLE***********************");
-                    System.out.println("( You slashed Thief: " + playerDamage + " damage. )\n");
-                    System.out.println("( Thief attacked You: " + thiefDamage + " damage. )\n");
+                    boolean[] isCritical = {false, false};
+                    int playerDamageCriticalIndex = 0;
+                    int enemyDamageCriticalIndex = 1;
+
+                    if (Math.random() * 100 < playerCriticalChance) {
+                        isCritical[playerDamageCriticalIndex] = true;
+                        playerHP -= thiefDamage;
+                        thiefHP -= playerCriticalDamage;
+
+                        damageStatus(playerCriticalDamage, thiefDamage, thief.getName(), isCritical);
+
+                    } else if (Math.random() * 100 < thiefCriticalChance) {
+                        isCritical[enemyDamageCriticalIndex] = true;
+                        playerHP -= thiefCriticalDamage;
+                        thiefHP -= playerDamage;
+
+                        damageStatus(playerDamage, thiefCriticalDamage, thief.getName(), isCritical);
+
+                    }
+
+                    if (!(isCritical[playerDamageCriticalIndex] || isCritical[enemyDamageCriticalIndex])) {
+                        damageStatus(playerDamage, thiefDamage, thief.getName(), isCritical);
+                        playerHP -= thiefDamage;
+                        thiefHP -= playerDamage;
+                    }
+
                     System.out.println("****************************************************");
 
                     sc.nextLine();
                     sc.nextLine();
                     System.out.println(separator);
 
-                    playerHP -= thiefDamage;
-                    thiefHP -= playerDamage;
+                    player.setHitpoints(playerHP);
+                    thief.setHitpoints(thiefHP);
 
                     if (thiefHP < 1) {
                         System.out.println("You won!");
@@ -267,15 +300,25 @@ public class Phase2 {
                         System.out.println("You know have " + player.getFromInventory(Item.MONEY) + " coins.\n");
                         fight = false;
                         return true;
-                    } else {
-                        player.setHitpoints(playerHP);
-                        thief.setHitpoints(thiefHP);
                     }
                 }
             }
 
         }
         return false;
+    }
+
+    private void damageStatus(int playerDamage, int enemyDamage, String enemyName, boolean[] isCritical) {
+        if (isCritical[0]) {
+            System.out.println("( You slashed " + enemyName + ": " + playerDamage + " damage. [CRITICAL DAMAGE!])\n");
+            System.out.println("( " + enemyName + " attacked You: " + enemyDamage + " damage. )\n");
+        } else if (isCritical[1]) {
+            System.out.println("( You slashed " + enemyName + ": " + playerDamage + " damage. )\n");
+            System.out.println("( " + enemyName + " attacked You: " + enemyDamage + " damage. [CRITICAL DAMAGE!])\n");
+        } else {
+            System.out.println("( You slashed " + enemyName + ": " + playerDamage + " damage. )\n");
+            System.out.println("( " + enemyName + " attacked You: " + enemyDamage + " damage. )\n");
+        }
     }
 
     public void toGuild() {
